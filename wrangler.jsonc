@@ -1,0 +1,18 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "vehicle-appmanager-grupblasi",
+	"compatibility_date": "2026-09-25",
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "vehicle-appmanager-d1",
+			"database_id": "pending-credentials"
+		},
+		{
+			"binding": "admin_nuxt_db",
+			"database_name": "admin-nuxt-db",
+			"database_id": "7dd66b82-4913-4c98-9ed7-1783283036fd",
+			"remote": true
+		}
+	]
+}

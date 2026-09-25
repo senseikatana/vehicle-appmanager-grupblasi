@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from '@tailwindcss/vite'
+
 export default defineNuxtConfig({
   modules: [
     '@nuxt/content',
@@ -15,10 +17,13 @@ export default defineNuxtConfig({
     '@nuxtjs/harlem',
     '@nuxtjs/i18n',
     '@nuxtjs/seo',
-    '@nuxtjs/tailwindcss',
-    '@prisma/nuxt',
     '@sidebase/nuxt-auth',
   ],
+  // Prisma se gestiona manual con lib/prisma.ts (@prisma/nuxt es v6-only e incompatible con Prisma 7 + D1)
+  css: ['~/assets/css/main.css'],
+  vite: {
+    plugins: [tailwindcss()],
+  },
   devtools: { enabled: true },
   compatibilityDate: '2024-04-03',
 })

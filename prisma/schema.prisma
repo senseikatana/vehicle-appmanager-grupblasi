@@ -1,0 +1,115 @@
+// Esquema base local (SQLite) compatible con Cloudflare D1.
+// En D1 las migraciones se aplican con: wrangler d1 execute --local/--remote
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+  runtime  = "cloudflare"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  IN_USE
+  WORKSHOP
+  RETIRED
+}
+
+enum MaintenanceKind {
+  PREVENTIVE
+  CORRECTIVE
+}
+
+enum IncidentStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+model Vehicle {
+  id          Int           @id @default(autoincrement())
+  plate       String        @unique
+  brand       String
+  model       String
+  vehicleType String
+  year        Int
+  fuel        String
+  mileage     Int           @default(0)
+  status      VehicleStatus @default(AVAILABLE)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  assignments  Assignment[]
+  maintenances Maintenance[]
+  documents    LegalDocument[]
+  incidents    Incident[]
+  costs        CostEntry[]
+}
+
+model Assignment {
+  id         Int       @id @default(autoincrement())
+  vehicleId  Int
+  vehicle    Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  assignee   String
+  department String?
+  site       String?
+  startAt    DateTime  @default(now())
+  endAt      DateTime?
+  active     Boolean   @default(true)
+
+  @@index([vehicleId, active])
+}
+
+model Maintenance {
+  id        Int             @id @default(autoincrement())
+  vehicleId Int
+  vehicle   Vehicle         @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  kind      MaintenanceKind
+  date      DateTime        @default(now())
+  mileage   Int?
+  cost      Float           @default(0)
+  provider  String?
+  notes     String?
+
+  @@index([vehicleId, date])
+}
+
+model LegalDocument {
+  id        Int      @id @default(autoincrement())
+  vehicleId Int
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  docType   String
+  expiresAt DateTime
+  fileUrl   String?
+  notes     String?
+
+  @@index([expiresAt])
+  @@index([vehicleId])
+}
+
+model Incident {
+  id          Int            @id @default(autoincrement())
+  vehicleId   Int
+  vehicle     Vehicle        @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  status      IncidentStatus @default(OPEN)
+  description String
+  cost        Float          @default(0)
+  createdAt   DateTime       @default(now())
+  closedAt    DateTime?
+
+  @@index([vehicleId, status])
+}
+
+model CostEntry {
+  id        Int      @id @default(autoincrement())
+  vehicleId Int
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  category  String
+  amount    Float
+  date      DateTime @default(now())
+  notes     String?
+
+  @@index([vehicleId, date])
+}
