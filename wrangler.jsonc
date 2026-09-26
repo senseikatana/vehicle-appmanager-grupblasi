@@ -6,13 +6,7 @@
 		{
 			"binding": "DB",
 			"database_name": "vehicle-appmanager-d1",
-			"database_id": "pending-credentials"
-		},
-		{
-			"binding": "admin_nuxt_db",
-			"database_name": "admin-nuxt-db",
-			"database_id": "7dd66b82-4913-4c98-9ed7-1783283036fd",
-			"remote": true
+			"database_id": "47523b68-7b5b-46a2-aaed-bc195955fa3e"
 		}
 	]
 }
