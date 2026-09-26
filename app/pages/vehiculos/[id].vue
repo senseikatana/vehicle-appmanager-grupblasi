@@ -63,7 +63,7 @@ async function remove() {
       {{ vehicle.plate }} — {{ vehicle.brand }} {{ vehicle.model }}
     </h1>
     <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
-      {{ vehicle.vehicleType }} · {{ vehicle.year }} · {{ vehicle.fuel }} · {{ vehicle.mileage }} km
+      {{ vehicle.vehicleType }} · {{ vehicle.year }} · {{ vehicle.fuel }} · {{ formatKm(vehicle.mileage) }} km
     </p>
     <div class="mt-4 flex flex-wrap items-center gap-2">
       <span class="text-sm">Estado: <strong>{{ vehicle.status }}</strong></span>

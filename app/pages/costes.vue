@@ -29,7 +29,7 @@ async function autofill() {
       Costes
     </h1>
     <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
-      Mantenimiento: {{ stats?.maintenanceCost ?? 0 }} € · Otros: {{ stats?.otherCosts ?? 0 }} €
+      Mantenimiento: {{ formatEuro(stats?.maintenanceCost ?? 0) }} · Otros: {{ formatEuro(stats?.otherCosts ?? 0) }}
     </p>
     <UCard class="mt-4">
       <template #header>
@@ -54,7 +54,12 @@ async function autofill() {
     </UCard>
     <UTable
       :data="records ?? []"
-      :columns="[{ accessorKey: 'vehicle', header: 'Vehículo' }, { accessorKey: 'category', header: 'Categoría' }, { accessorKey: 'amount', header: 'Importe' }, { accessorKey: 'date', header: 'Fecha' }]"
+      :columns="[
+        { accessorKey: 'vehicle', header: 'Vehículo' },
+        { accessorKey: 'category', header: 'Categoría' },
+        { accessorKey: 'amount', header: 'Importe', cell: ({ row }) => formatEuro(row.original.amount) },
+        { accessorKey: 'date', header: 'Fecha' },
+      ]"
       class="mt-4"
     >
       <template #vehicle-cell="{ row }">

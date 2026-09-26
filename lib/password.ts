@@ -1,4 +1,5 @@
 import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
+import { useUuid } from "katanakit-js";
 
 // Hash scrypt con sal aleatoria. Formato: "sal:hash".
 export function hashPassword(password: string): string {
@@ -15,6 +16,7 @@ export function verifyPassword(password: string, stored: string): boolean {
   return attempt.length === expected.length && timingSafeEqual(attempt, expected);
 }
 
+// Id de sesión en formato UUID v4 (crypto.getRandomValues por debajo).
 export function newSessionToken(): string {
-  return randomBytes(32).toString("hex");
+  return useUuid();
 }

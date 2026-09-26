@@ -1,13 +1,18 @@
 <script setup lang="ts">
 // Navbar mínimo: las cards del dashboard llevan a los módulos.
+import { useKatanaWatch } from "katanakit-js/adapters/nuxt";
+
 const route = useRoute();
 const menuOpen = ref(false);
 const { data: me, refresh } = await useFetch("/api/auth/me");
 
-// El menú móvil se cierra solo al navegar.
-watch(() => route.path, () => {
-  menuOpen.value = false;
-});
+// El menú móvil se cierra solo al navegar (adapter Nuxt de katanakit-js).
+useKatanaWatch(
+  () => route.path,
+  () => {
+    menuOpen.value = false;
+  },
+);
 
 const links = [
   { to: "/", label: "Inicio" },
@@ -21,6 +26,26 @@ const legal = [
   { to: "/legal/cookies", label: "Cookies" },
 ];
 
+const PUBLIC_PREFIXES = ["/legal/"];
+const PUBLIC_PATHS = ["/", "/about", "/signin", "/signup"];
+
+// El botón de volver solo en páginas internas del dashboard.
+const showBack = computed(
+  () =>
+    !PUBLIC_PATHS.includes(route.path) &&
+    !PUBLIC_PREFIXES.some((p) => route.path.startsWith(p)),
+);
+
+function goBack() {
+  // En SPA history.length crece al navegar; si es 1 no hay atrás posible.
+  if (window.history.length > 1) {
+    window.history.back();
+    return;
+  }
+  // Acceso directo: sin historial previo, volvemos al panel.
+  navigateTo("/dashboard");
+}
+
 async function signout() {
   await $fetch("/api/auth/signout", { method: "POST" });
   await refresh();
@@ -32,6 +57,14 @@ async function signout() {
   <div class="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
     <header class="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
       <div class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
+        <UButton
+          v-if="showBack"
+          icon="i-lucide-arrow-left"
+          color="neutral"
+          variant="ghost"
+          aria-label="Volver a la página anterior"
+          @click="goBack"
+        />
         <NuxtLink to="/" class="text-lg font-bold">
           Grup Blasi · Flota
         </NuxtLink>

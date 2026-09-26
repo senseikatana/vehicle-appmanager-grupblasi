@@ -27,7 +27,11 @@ async function updateMileage(id: number) {
     </p>
     <UTable
       :data="vehicles ?? []"
-      :columns="[{ accessorKey: 'plate', header: 'Matrícula' }, { accessorKey: 'mileage', header: 'Km actual' }, { id: 'actions' }]"
+      :columns="[
+        { accessorKey: 'plate', header: 'Matrícula' },
+        { accessorKey: 'mileage', header: 'Km actual', cell: ({ row }) => formatKm(row.original.mileage) },
+        { id: 'actions' },
+      ]"
       class="mt-4"
     >
       <template #actions-cell="{ row }">

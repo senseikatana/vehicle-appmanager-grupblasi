@@ -39,7 +39,7 @@ const totalCost = computed(() => (stats.value?.maintenanceCost ?? 0) + (stats.va
           Coste total
         </p>
         <p class="text-2xl font-bold">
-          {{ totalCost }} €
+          {{ formatEuro(totalCost) }}
         </p>
       </UCard>
       <UCard>
@@ -56,7 +56,11 @@ const totalCost = computed(() => (stats.value?.maintenanceCost ?? 0) + (stats.va
     </h2>
     <UTable
       :data="(vehicles ?? []).map((v) => ({ plate: v.plate, status: v.status, mileage: v.mileage }))"
-      :columns="[{ accessorKey: 'plate', header: 'Matrícula' }, { accessorKey: 'status', header: 'Estado' }, { accessorKey: 'mileage', header: 'Km' }]"
+      :columns="[
+        { accessorKey: 'plate', header: 'Matrícula' },
+        { accessorKey: 'status', header: 'Estado' },
+        { accessorKey: 'mileage', header: 'Km', cell: ({ row }) => formatKm(row.original.mileage) },
+      ]"
       class="mt-2"
     />
   </div>

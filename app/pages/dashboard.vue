@@ -52,7 +52,7 @@ const sections = [
           Coste total
         </p>
         <p class="text-2xl font-bold">
-          {{ totalCost }} €
+          {{ formatEuro(totalCost) }}
         </p>
       </UCard>
     </div>

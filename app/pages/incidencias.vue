@@ -49,7 +49,12 @@ async function autofill() {
     </UCard>
     <UTable
       :data="records ?? []"
-      :columns="[{ accessorKey: 'vehicle', header: 'Vehículo' }, { accessorKey: 'description', header: 'Descripción' }, { accessorKey: 'status', header: 'Estado' }, { accessorKey: 'cost', header: 'Coste' }]"
+      :columns="[
+        { accessorKey: 'vehicle', header: 'Vehículo' },
+        { accessorKey: 'description', header: 'Descripción' },
+        { accessorKey: 'status', header: 'Estado' },
+        { accessorKey: 'cost', header: 'Coste', cell: ({ row }) => formatEuro(row.original.cost) },
+      ]"
       class="mt-4"
     >
       <template #vehicle-cell="{ row }">
