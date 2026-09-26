@@ -6,6 +6,12 @@ generator client {
   runtime  = "cloudflare"
 }
 
+// Cliente Node para el servidor Nitro en local (el runtime cloudflare no resuelve en Node).
+generator server {
+  provider = "prisma-client"
+  output   = "../generated/server"
+}
+
 datasource db {
   provider = "sqlite"
 }
@@ -26,6 +32,35 @@ enum IncidentStatus {
   OPEN
   IN_PROGRESS
   CLOSED
+}
+
+// Roles interdepartamentales (AGENTS.md, módulo 11).
+enum Role {
+  ADMIN
+  GESTOR_FLOTA
+  TECNICO
+  EMPLEADO
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         Role      @default(EMPLEADO)
+  createdAt    DateTime  @default(now())
+
+  sessions Session[]
+}
+
+model Session {
+  id        String   @id
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model Vehicle {
