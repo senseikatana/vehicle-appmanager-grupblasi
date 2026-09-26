@@ -11,13 +11,12 @@ export default defineNuxtConfig({
     '@ant-design-vue/nuxt',
     '@formkit/nuxt',
     '@kgierke/nuxt-basic-auth',
-    '@nuxtjs/eslint-module',
     '@nuxtjs/google-fonts',
     '@nuxtjs/hanko',
     '@nuxtjs/harlem',
     '@nuxtjs/i18n',
     '@nuxtjs/seo',
-    '@sidebase/nuxt-auth',
+    // Auth: se cableará con Cloudflare + InsForge en el Módulo 11 (@sidebase/nuxt-auth desactivado: sin handler rompía /api/auth/*)
   ],
   // Prisma se gestiona manual con lib/prisma.ts (@prisma/nuxt es v6-only e incompatible con Prisma 7 + D1)
   css: ['~/assets/css/main.css'],
